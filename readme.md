@@ -22,7 +22,7 @@ The trained model is serialized using Pickle and deployed on Streamlit Cloud.
 - requirements.txt                  # Dependencies
 - readme.md
 
-## How It Works
+## How It Works :-
 Dataset (250K rows)  
 ↓  
 One-Hot Encoding (converts categorical columns into numerical format, expanding from 10 → 43 columns)  
