@@ -1,4 +1,4 @@
-###SALARY PREDICTOR
+#SALARY PREDICTOR
 
 This dataset contains 250,000 job records designed for salary prediction, data analysis, and machine learning projects.
 It includes information about job titles, experience level, education background, skills, industry type, company size, and work location.
@@ -40,17 +40,17 @@ XGBoost performs well than LinearRegression and Random Forest across all the met
 
 
 ##Run Locally :-
-# 1. Clone the repo
+1. Clone the repo
 git clone https://github.com/harkirat-data/Salary-Prediction-Dataset.git
 cd Salary-Prediction-Dataset
 
-# 2. Install dependencies
+2. Install dependencies
 pip install -r requirements.txt
 
-# 3. Train and save model (only once)
+3. Train and save model (only once)
 python save_model.py
 
-# 4. Run the app
+4. Run the app
 streamlit run app.py
 
 ##Live Demo :-
