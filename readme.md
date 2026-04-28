@@ -26,19 +26,19 @@ Job/
 ├── requirements.txt                  # Dependencies
 └── readme.md
 
-##How It Works :-
+## How It Works
 
-Dataset (250K rows)
-      ↓
-One-Hot Encoding (Converts categorical columns into numerical format)(10 → 43 columns)
-      ↓
-Train-Test Split (training and testing sets- (80/20) ratio)
-      ↓
-XGBoost Training (locally)
-      ↓
-Model Saved as model.pkl
-      ↓
-Streamlit loads pkl → Predicts instantly without re-training
+Dataset (250K rows)  
+↓  
+One-Hot Encoding (converts categorical columns into numerical format, expanding from 10 → 43 columns)  
+↓  
+Train-Test Split (80/20 ratio)  
+↓  
+XGBoost Training (done locally)  
+↓  
+Model saved as `model.pkl`  
+↓  
+Streamlit loads the model → Predicts instantly without retraining
 
 Model Result :- 
 
