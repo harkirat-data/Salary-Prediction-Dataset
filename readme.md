@@ -13,14 +13,14 @@ The trained model is serialized using Pickle and deployed on Streamlit Cloud.
 - UI — Built with Streamlit
 
 ## Project Structure :- 
-Job/
-├── app.py                            # Streamlit web app
-├── save_model.py                     # Train & save model locally
-├── model.pkl                         # Saved XGBoost model + metadata
-├── job_salary_prediction_dataset.csv # Dataset 
-├── JS.ipynb                          # EDA + Model training & comparison notebook
-├── requirements.txt                  # Dependencies
-└── readme.md
+
+- app.py                            # Streamlit web app
+- save_model.py                     # Train & save model locally
+- model.pkl                         # Saved XGBoost model + metadata
+- job_salary_prediction_dataset.csv # Dataset 
+- JS.ipynb                          # EDA + Model training & comparison notebook
+- requirements.txt                  # Dependencies
+- readme.md
 
 ## How It Works
 Dataset (250K rows)  
@@ -54,4 +54,4 @@ python save_model.py
 streamlit run app.py
 
 ## Live Demo :-
-salary-prediction-dataset.streamlit.app
+[salary-prediction-dataset.streamlit.app](https://salary-prediction-dataset-cfnu7txed6nbolzxrjwpk4.streamlit.app/)
