@@ -11,18 +11,14 @@ from xgboost import XGBRegressor
 import warnings
 warnings.filterwarnings('ignore')
 
-# ── PAGE CONFIG ────────────────────────────────────────────────────────────────
 st.set_page_config(page_title="Salary Predictor", layout="centered")
-
-st.markdown("<h1 style='text-align: center;'>Salary Predictor 💼</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>Salary Predictor </h1>", unsafe_allow_html=True)
 st.markdown("<p style='text-align: center; color: gray;'>Enter your details to predict your salary</p>", unsafe_allow_html=True)
 
-# ── LOAD DATA ─────────────────────────────────────────────────────────────────
 @st.cache_data
 def load_data():
     return pd.read_csv("job_salary_prediction_dataset.csv")
 
-# ── TRAIN MODEL ───────────────────────────────────────────────────────────────
 @st.cache_resource
 def train_model(df):
     cat_cols   = df.select_dtypes(include='object').columns
@@ -31,11 +27,9 @@ def train_model(df):
     X = df_encoded.drop('salary', axis=1)
     y = df_encoded['salary']
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42
-    )
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # All 3 models
+   
     lr  = LinearRegression()
     rf  = RandomForestRegressor(n_estimators=100, max_depth=30, random_state=42)
     xgb = XGBRegressor(n_estimators=100, max_depth=10, random_state=42, verbosity=0)
@@ -49,11 +43,7 @@ def train_model(df):
     xgb.fit(X_train,   y_train)
 
     results = []
-    for name, model, Xte in [
-        ('Linear Regression', lr,  X_test_sc),
-        ('Random Forest',     rf,  X_test),
-        ('XGBoost',           xgb, X_test),
-    ]:
+    for name, model, Xte in [('Linear Regression', lr, X_test_sc), ('Random Forest', rf,  X_test), ('XGBoost', xgb, X_test) ]:
         y_pred = model.predict(Xte)
         results.append({
             'Model':     name,
@@ -64,38 +54,28 @@ def train_model(df):
 
     return xgb, scaler, X.columns.tolist(), pd.DataFrame(results)
 
-# ── LOAD ──────────────────────────────────────────────────────────────────────
 try:
     df = load_data()
 except FileNotFoundError:
-    st.error("❌ `job_salary_prediction_dataset.csv` not found! Put the CSV in the same folder as app.py.")
+    st.error("`job_salary_prediction_dataset.csv` not found! Put the CSV in the same folder as app.py.")
     st.stop()
 
 xgb_model, scaler, feature_cols, results_df = train_model(df)
 
-# ── SIDEBAR INPUTS ────────────────────────────────────────────────────────────
 st.sidebar.header("Your Profile")
 
 Experience = st.sidebar.slider("Experience (years):", 0, 20, 8)
 Education  = st.sidebar.selectbox("Education Level:", ["High School", "Diploma", "Bachelor", "Master", "PhD"])
-Industry   = st.sidebar.selectbox("Industry:", ["Healthcare", "Education", "Telecom", "Government",
-                                                  "Consulting", "Manufacturing", "Media", "Finance",
-                                                  "Technology", "Retail"])
-Job_Title  = st.sidebar.selectbox("Job Title:", ["AI Engineer", "Data Analyst", "Frontend Developer",
-                                                   "Business Analyst", "Product Manager", "Backend Developer",
-                                                   "Machine Learning Engineer", "DevOps Engineer",
-                                                   "Software Engineer", "Cybersecurity Analyst",
-                                                   "Data Scientist", "Cloud Engineer"])
+Industry   = st.sidebar.selectbox("Industry:", ["Healthcare", "Education", "Telecom", "Government","Consulting", "Manufacturing", "Media", "Finance","Technology", "Retail"])
+Job_Title  = st.sidebar.selectbox("Job Title:", ["AI Engineer", "Data Analyst", "Frontend Developer","Business Analyst", "Product Manager", "Backend Developer","Machine Learning Engineer", "DevOps Engineer","Software Engineer", "Cybersecurity Analyst","Data Scientist", "Cloud Engineer"])
 Skills     = st.sidebar.slider("Skills Count:", 1, 19, 8)
 Company    = st.sidebar.selectbox("Company Size:", ["Small", "Medium", "Large", "Enterprise", "Startup"])
-Location   = st.sidebar.selectbox("Location:", ["India", "USA", "UK", "Australia", "Singapore",
-                                                  "Canada", "Germany", "Netherlands", "Sweden", "Remote"])
+Location   = st.sidebar.selectbox("Location:", ["India", "USA", "UK", "Australia", "Singapore","Canada", "Germany", "Netherlands", "Sweden", "Remote"])
 Remote     = st.sidebar.selectbox("Remote Work:", ["Yes", "No", "Hybrid"])
 Certs      = st.sidebar.slider("Certifications:", 0, 5, 1)
 
 predicted_btn = st.sidebar.button("Predict Salary")
 
-# ── MAIN LAYOUT ───────────────────────────────────────────────────────────────
 col1, col2 = st.columns([1, 2])
 
 with col1:
@@ -114,7 +94,6 @@ with col2:
     st.markdown("<h3 style='text-align: right;'>Prediction Result</h3>", unsafe_allow_html=True)
 
     if predicted_btn:
-        # Build input for model
         input_raw = {
             'experience_years': Experience,
             'skills_count':     Skills,
@@ -131,7 +110,6 @@ with col2:
         cat_in        = input_df.select_dtypes(include='object').columns
         input_encoded = pd.get_dummies(input_df, columns=cat_in, drop_first=True)
 
-        # Align with training columns
         for col in feature_cols:
             if col not in input_encoded.columns:
                 input_encoded[col] = 0
@@ -139,7 +117,6 @@ with col2:
 
         predicted_salary = xgb_model.predict(input_encoded)[0]
 
-        # Show result
         st.markdown(
             f"""
             <div style="background-color:#111827; padding:40px;
@@ -153,7 +130,6 @@ with col2:
 
         st.markdown("")
 
-        # Real metrics
         xgb_row = results_df[results_df['Model'] == 'XGBoost'].iloc[0]
         colA, colB, colC = st.columns(3)
         colA.metric("R² Score", f"{xgb_row['R-squared']:.4f}")
@@ -163,7 +139,6 @@ with col2:
     else:
         st.info("Click the 'Predict Salary' button in the sidebar to see your estimated salary based on the provided details.")
 
-# ── MODEL COMPARISON ──────────────────────────────────────────────────────────
 st.markdown("---")
 st.markdown("### 🤖 Model Comparison")
 st.dataframe(results_df, use_container_width=True, hide_index=True)
@@ -188,7 +163,6 @@ with col_p2:
     fig_rmse.update_layout(showlegend=False)
     st.plotly_chart(fig_rmse, use_container_width=True)
 
-# ── EDA ───────────────────────────────────────────────────────────────────────
 st.markdown("---")
 st.markdown("### 📊 Data Insights")
 
@@ -222,11 +196,3 @@ with col_e4:
                        color='company_size')
     st.plotly_chart(fig_cs, use_container_width=True)
 
-# ── FOOTER ────────────────────────────────────────────────────────────────────
-st.markdown("---")
-st.markdown(
-    "<p style='text-align:center; color:gray; font-size:0.8rem;'>"
-    "Built by Harkirat · B.Tech CSE (Data Science) · NIT · GDG Lead Task #2"
-    "</p>",
-    unsafe_allow_html=True,
-)
