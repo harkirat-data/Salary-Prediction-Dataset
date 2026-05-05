@@ -53,5 +53,5 @@ python save_model.py
 4. Run the app
 streamlit run app.py
 
-## Live Demo :-
-[salary-prediction-dataset.streamlit.app](https://salary-prediction-dataset-cfnu7txed6nbolzxrjwpk4.streamlit.app/)
+## Live Demo
+[Salary Prediction App](https://salary-prediction-dataset-cfnu7txednbolxzrjwpk4.streamlit.app/)
