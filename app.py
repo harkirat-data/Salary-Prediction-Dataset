@@ -49,7 +49,7 @@ def train_model(df):
             'Model':     name,
             'MAE':       round(mean_absolute_error(y_test, y_pred), 2),
             'RMSE':      round(np.sqrt(mean_squared_error(y_test, y_pred)), 2),
-            'R-squared': round(r2_score(y_test, y_pred), 4),
+            'R_Squared': round(r2_score(y_test, y_pred), 4),
         })
 
     return xgb, scaler, X.columns.tolist(), pd.DataFrame(results)
@@ -132,7 +132,7 @@ with col2:
 
         xgb_row = results_df[results_df['Model'] == 'XGBoost'].iloc[0]
         colA, colB, colC = st.columns(3)
-        colA.metric("R² Score", f"{xgb_row['R-squared']:.4f}")
+        colA.metric("R² Score", f"{xgb_row['R_Squared']:.4f}")
         colB.metric("RMSE",     f"{xgb_row['RMSE']:,.0f}")
         colC.metric("MAE",      f"{xgb_row['MAE']:,.0f}")
 
@@ -146,9 +146,9 @@ st.dataframe(results_df, use_container_width=True, hide_index=True)
 col_p1, col_p2 = st.columns(2)
 
 with col_p1:
-    fig_r2 = px.bar(results_df, x='Model', y='R-squared',
+    fig_r2 = px.bar(results_df, x='Model', y='R_Squared',
                     title='R² Score Comparison',
-                    color='Model', text='R-squared',
+                    color='Model', text='R_Squared',
                     color_discrete_sequence=['#22c55e', '#3b82f6', '#f59e0b'])
     fig_r2.update_traces(texttemplate='%{text:.4f}', textposition='outside')
     fig_r2.update_layout(showlegend=False, yaxis_range=[0.95, 0.98])
